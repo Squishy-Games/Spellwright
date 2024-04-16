@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Staticsstuff/Scenes/terain.unity
+    guid: 81aa1f5f3bd9b784bbd27170913a26b2
   m_configObjects: {}
