@@ -338,6 +338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e65ddd1d466ed50468efc32a26a41acc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _noiseTexture: {fileID: 2800000, guid: 89913db38204f4649a57646bc6bca8ee, type: 3}
 --- !u!154 &43498203
 TerrainCollider:
   m_ObjectHideFlags: 0
