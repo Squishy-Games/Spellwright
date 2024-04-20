@@ -5,12 +5,15 @@ using UnityEngine;
 
 public class InventoryHandler : MonoBehaviour
 {
+    public int amount;
     public inventoryHolder InventoryData;
     // Start is called before the first frame update
     void Start()
     {
         InventoryData.AddToInventory("Hello", 1);
         InventoryData.AddToIngredient("Hello", 3);
+        InventoryData.EjectFromInventory("Hello", 2);
+        amount = InventoryData.RequestAmount("Hello");
     }
 
     // Update is called once per frame

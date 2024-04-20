@@ -22,4 +22,8 @@ public class inventoryHolder : ScriptableObject
         Inventory[name] = Inventory[name] + amountToAdd;
         Debug.Log(Inventory[name]);
     }
+    public int RequestAmount(string name)
+    {
+        return Inventory[name];
+    }
 }
