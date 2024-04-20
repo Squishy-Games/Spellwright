@@ -12,4 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e38e2657b650ee41b80d8508f8dc517, type: 3}
   m_Name: InventoryData
   m_EditorClassIdentifier: 
-  Obtainableitems: []
+  counter: 0
+  Obtainableitems:
+  - Carrot
+  - Gem
+  - Bones
+  - Dog
+  - Tom
