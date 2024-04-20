@@ -13,9 +13,9 @@ public class inventoryHolder : ScriptableObject
     {
         Inventory.Add(name, Amount);
     }
-        public void EjectFromInventory(string name){
-        int Amount = Inventory[name];
-        Inventory.Add(name, Amount-1);
+    public void EjectFromInventory(string name, int amountToEject)
+    {
+        Inventory[name] = Inventory[name] - amountToEject;
     }
     public void AddToIngredient(string name, int amountToAdd)
     {
