@@ -33,6 +33,10 @@ public class inventoryHolder : ScriptableObject
     }
     public void AddToIngredient(string name, int amountToAdd)
     {
+        if(Inventory.TryAdd(name, amountToAdd) == false)
+        {
+            AddToInventory(name, amountToAdd);
+        }
         Inventory[name] = Inventory[name] + amountToAdd;
         Debug.Log(Inventory[name]);
     }
