@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class InventoryLoadUI : MonoBehaviour
 {
-    inventoryHolder Inventory;
+    public inventoryHolder Inventory;
     public int counter;
-    List<string> names = new List<string>();
+    public List<string> names = new List<string>();
     // Start is called before the first frame update
     void Start()
     {
 
- //       names = Inventory.Obtainableitems;
+
     }
 
     // Update is called once per frame
@@ -23,5 +23,10 @@ public class InventoryLoadUI : MonoBehaviour
             Debug.Log(quantity);
             counter ++;
         }
+        counter = 0;
+    }
+    public void SpawnIn()
+    {
+
     }
 }

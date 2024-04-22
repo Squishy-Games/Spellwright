@@ -16,6 +16,7 @@ public class InventoryHandler : MonoBehaviour
         InventoryData.AddToIngredient("Hello", 3);
         InventoryData.EjectFromInventory("Hello", 2);
         amount = InventoryData.RequestAmount("Hello");
+        load.names = InventoryData.Obtainableitems;
         load.Load();
     }
 
