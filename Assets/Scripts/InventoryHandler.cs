@@ -12,12 +12,13 @@ public class InventoryHandler : MonoBehaviour
     void Start()
     {
         InventoryData.AdministratingItems();
+        load.Load();
         InventoryData.AddToIngredient("Hello", 1);
         InventoryData.AddToIngredient("Hello", 3);
         InventoryData.EjectFromInventory("Hello", 2);
         amount = InventoryData.RequestAmount("Hello");
         load.names = InventoryData.Obtainableitems;
-        load.Load();
+
         InventoryData.AddToIngredient("Mauro", 5);
     }
 

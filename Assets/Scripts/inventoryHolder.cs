@@ -25,7 +25,9 @@ public class inventoryHolder : ScriptableObject
     }
     public void AddToInventory(string name, int Amount)
     {
-        Inventory.Add(name, Amount);
+        if(Inventory.ContainsKey(name) == false){
+            Inventory.Add(name, Amount);
+        }
     }
     public void EjectFromInventory(string name, int amountToEject)
     {

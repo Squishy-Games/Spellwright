@@ -444,6 +444,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca42759d219337942bd0fdaad8a2bad4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Ingredient: {fileID: 952153446}
+  content: {fileID: 1306979056}
   Inventory: {fileID: 11400000, guid: 28cd2a4ad3b294d419fa8daed0b20e66, type: 2}
   counter: 0
   names: []
@@ -522,6 +524,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 435125017}
   m_CullTransparentMesh: 1
+--- !u!1 &952153446 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1747047416906153971, guid: 4063880769884b14aba5ae43eed4d3a9, type: 3}
+  m_PrefabInstance: {fileID: 6907206192055076553}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1110046854
 GameObject:
   m_ObjectHideFlags: 0
