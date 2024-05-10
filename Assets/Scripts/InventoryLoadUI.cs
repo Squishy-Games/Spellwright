@@ -12,6 +12,8 @@ public class InventoryLoadUI : MonoBehaviour
     public inventoryHolder Inventory;
     public int counter;
     public List<string> names = new List<string>();
+    public List<Vector4> ItemPlacement;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,7 +36,7 @@ public class InventoryLoadUI : MonoBehaviour
         Debug.Log("came here");
         GameObject Ingrediente = Instantiate(Ingredient, content.transform);
         Ingrediente.transform.position = new Vector3(Ingrediente.transform.position.x,Ingrediente.transform.position.y - distance * counter + 1,Ingrediente.transform.position.z);
-        Ingrediente.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = names[counter];
-        Ingrediente.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = ""+Amount;
+        //Ingrediente.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = names[counter];
+        //Ingrediente.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = ""+Amount;
     }
 }
