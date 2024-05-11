@@ -10,7 +10,6 @@ public class inventoryHolder : ScriptableObject
     public int counter = 0;
     public Dictionary<string, int> Inventory = new Dictionary<string, int>();
     public List<string> Obtainableitems;
-    public List<Vector4> ItemPlacement;
     public void AdministratingItems()
     {
         Debug.Log("Hello");
@@ -36,7 +35,7 @@ public class inventoryHolder : ScriptableObject
     }
     public void AddToIngredient(string name, int amountToAdd)
     {
-        if(Inventory.TryAdd(name, amountToAdd) == false)
+        if(Inventory.ContainsKey(name) == false)
         {
             AddToInventory(name, amountToAdd);
         }
