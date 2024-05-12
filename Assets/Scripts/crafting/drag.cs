@@ -16,6 +16,11 @@ public class drag : MonoBehaviour
         if(IsDragging == true)
         {
             transform.position = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, 8);
+            transform.GetComponent<Rigidbody2D>().gravityScale = 0;
+            transform.GetComponent<Rigidbody2D>().velocity = new Vector3(0,0,0);
+        }
+        else {
+            transform.GetComponent<Rigidbody2D>().gravityScale = 1;
         }
     }
     void OnMouseOver()
