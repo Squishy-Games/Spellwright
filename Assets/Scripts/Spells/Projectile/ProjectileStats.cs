@@ -15,7 +15,5 @@ public struct ProjectileStats
     }
     public bool useGravity;
 
-    [Header("Explosion")] public float power;
-    public float radius;
-    public float upwardsPower;
+    public ExplosionStruct ExplosionStruct;
 }

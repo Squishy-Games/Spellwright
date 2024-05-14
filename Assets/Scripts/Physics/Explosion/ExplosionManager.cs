@@ -6,16 +6,6 @@ using UnityEngine.Serialization;
 public class ExplosionManager : MonoBehaviour
 {
     [SerializeField] private GameObject explosionPrefab;
-    public ExplosionStruct ConvertProjectileStatsToExplosionStruct(ProjectileStats projectileStats)
-    {
-        ExplosionStruct explosionStruct = new ExplosionStruct();
-
-        explosionStruct.power = projectileStats.power;
-        explosionStruct.radius = projectileStats.radius;
-        explosionStruct.upwardsPower = projectileStats.upwardsPower;
-
-        return explosionStruct;
-    }
 
     public void CreateExplosion(Vector3 spawnpoint, ExplosionStruct newExplosion)
     {

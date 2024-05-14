@@ -971,6 +971,18 @@ PrefabInstance:
       propertyPath: BaseProjectileStats.BaseSpeed.x
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 4232968059603861097, guid: 2096921dc3049a6489eff689d0df1272, type: 3}
+      propertyPath: BaseProjectileStats.ExplosionStruct.power
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4232968059603861097, guid: 2096921dc3049a6489eff689d0df1272, type: 3}
+      propertyPath: BaseProjectileStats.ExplosionStruct.radius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4232968059603861097, guid: 2096921dc3049a6489eff689d0df1272, type: 3}
+      propertyPath: BaseProjectileStats.ExplosionStruct.upwardsPower
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6400256712796804594, guid: 2096921dc3049a6489eff689d0df1272, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
