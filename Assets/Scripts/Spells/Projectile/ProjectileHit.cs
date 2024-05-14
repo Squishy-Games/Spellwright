@@ -1,21 +1,16 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class ProjectileHit : MonoBehaviour
 {
-    private float BaseSurviveTime;
+    private float _baseSurviveTime;
     private ExplosionManager _explosionManager;
 
     private void Start()
     {
         _explosionManager = FindObjectOfType<ExplosionManager>();
-        if (BaseSurviveTime == 0)
+        if (_baseSurviveTime == 0)
             return;
-        Invoke("EndProjectile", BaseSurviveTime);
+        Invoke("EndProjectile", _baseSurviveTime);
     }
 
     private void EndProjectile()

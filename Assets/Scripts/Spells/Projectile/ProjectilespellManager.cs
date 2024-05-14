@@ -10,10 +10,10 @@ public class ProjectilespellManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(clearDictionary());
+        StartCoroutine(ClearDictionary());
     }
 
-    IEnumerator clearDictionary()
+    IEnumerator ClearDictionary()
     {
         while (true)
         {
@@ -28,7 +28,6 @@ public class ProjectilespellManager : MonoBehaviour
             {
                 if (index.Key == null)
                 {
-                    
                     remove.Add(index.Key);
                 }
             }

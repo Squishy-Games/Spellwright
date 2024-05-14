@@ -5,14 +5,14 @@ using UnityEditor;
 // Applies an explosion force to all nearby rigidbodies
 public class Explosion : MonoBehaviour
 {
-    private float correctedPower;
-    private float explosioncorrectie = 100;
+    private float _correctedPower;
+    private float _explosioncorrectie = 100;
 
     public ExplosionStruct fireball;
     
     void Start()
     {
-        correctedPower = fireball.power * explosioncorrectie;
+        _correctedPower = fireball.power * _explosioncorrectie;
         Vector3 explosionPos = transform.position;
         Collider[] colliders = Physics.OverlapSphere(explosionPos, fireball.radius);
         foreach (Collider hit in colliders)
@@ -20,7 +20,7 @@ public class Explosion : MonoBehaviour
             Rigidbody rb = hit.GetComponent<Rigidbody>();
 
             if (rb != null)
-                rb.AddExplosionForce(correctedPower, explosionPos, fireball.radius, fireball.upwardsPower);
+                rb.AddExplosionForce(_correctedPower, explosionPos, fireball.radius, fireball.upwardsPower);
         }
         Destroy(gameObject);
     }
