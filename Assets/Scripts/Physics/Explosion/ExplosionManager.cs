@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 
 public class ExplosionManager : MonoBehaviour
 {
-    [FormerlySerializedAs("exsplosionPrefab")] [SerializeField] private GameObject explosionPrefab;
+    [SerializeField] private GameObject explosionPrefab;
     public ExplosionStruct ConvertProjectileStatsToExplosionStruct(ProjectileStats projectileStats)
     {
         ExplosionStruct explosionStruct = new ExplosionStruct();

@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseProjectileStats:
-    BaseSpeed: {x: 25, y: 0, z: 0}
+    BaseSpeed: {x: 0, y: 0, z: 0}
     size: 1
     useGravity: 0
     power: 0

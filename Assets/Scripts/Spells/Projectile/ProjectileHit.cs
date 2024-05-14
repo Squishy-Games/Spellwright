@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class projectileHit : MonoBehaviour
+public class ProjectileHit : MonoBehaviour
 {
     private float BaseSurviveTime;
     private ExplosionManager _explosionManager;
