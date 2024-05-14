@@ -23,7 +23,7 @@ public class ProjectileHit : MonoBehaviour
         if (!gameObject.activeSelf)
             return;
         _explosionManager.CreateExplosion(transform.position,
-            _explosionManager.FindObjectOfType<ProjectilespellManager>().projectilespells[gameObject].ExplosionStruct);
+            FindObjectOfType<ProjectilespellManager>().projectilespells[gameObject].ExplosionStruct);
 
         //gameObject.SetActive(false);
         Destroy(gameObject);
