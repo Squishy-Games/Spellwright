@@ -7,26 +7,27 @@ using UnityEngine.Serialization;
 
 public class projectileHit : MonoBehaviour
 {
-    [SerializeField] private float BaseSurviveTime;
-    [SerializeField] private GameObject spawnOnHit;
-    private Explosion biem;
+    private float BaseSurviveTime;
+    private ExplosionManager _explosionManager;
 
     private void Start()
     {
+        _explosionManager = FindObjectOfType<ExplosionManager>();
         if (BaseSurviveTime == 0)
             return;
-
-        biem = FindObjectOfType<Explosion>();
         Invoke("EndProjectile", BaseSurviveTime);
     }
 
     private void EndProjectile()
     {
-        if (!gameObject.activeSelf) 
+        if (!gameObject.activeSelf)
             return;
+        _explosionManager.CreateExplosion(transform.position,
+            _explosionManager.ConvertProjectileStatsToExplosionStruct(FindObjectOfType<ProjectilespellManager>()
+                .projectilespells[gameObject]));
         
-        Instantiate(spawnOnHit, transform.position, transform.rotation);
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 
     private void OnCollisionEnter(Collision other)

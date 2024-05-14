@@ -47,3 +47,7 @@ MonoBehaviour:
   radius: 5
   power: 5
   upwardspower: 3
+  fireball:
+    power: 5
+    radius: 5
+    upwardspower: 3
