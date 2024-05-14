@@ -1,20 +1,33 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BaseProjectile : MonoBehaviour
 {
-    private Rigidbody m_Rigidbody;
-    public Vector3 m_Speed;
+    private Rigidbody _rigidbody;
+    private SphereCollider _collider;
+    [FormerlySerializedAs("m_Speed")] public Vector3 BaseSpeed;
 
     void Start()
     {
-        //Fetch the Rigidbody from the GameObject with this script attached
-        m_Rigidbody = GetComponent<Rigidbody>();
+        _collider = GetComponent<SphereCollider>();
+        _rigidbody = GetComponent<Rigidbody>();
+        LookForWarnings();
     }
 
     void FixedUpdate()
     {
-        m_Rigidbody.MovePosition(transform.position + m_Speed * Time.deltaTime);
+        _rigidbody.MovePosition(transform.position + BaseSpeed * Time.fixedDeltaTime);
+    }
+
+
+    void LookForWarnings()
+    {
+        if (_collider != null)
+            if (_collider.radius < BaseSpeed.magnitude * Time.fixedDeltaTime / 2)
+                Debug.LogWarning("speed of " + gameObject.name +
+                                 " is higher then the collider radius. meaning it can move through colliders",
+                    gameObject.transform.GetComponent<BaseProjectile>());
     }
 }
