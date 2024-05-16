@@ -19,3 +19,9 @@ MonoBehaviour:
   - Bones
   - Dog
   - Tom
+  Ingredients:
+  - {fileID: 4622274874255130022, guid: e4b1b13a3d79f4c458fb2070a1043260, type: 3}
+  - {fileID: 1118740013001363738, guid: 10c030c49a130e84cb5e103a9caa7285, type: 3}
+  - {fileID: 4622274874255130022, guid: e4b1b13a3d79f4c458fb2070a1043260, type: 3}
+  - {fileID: 4622274874255130022, guid: e4b1b13a3d79f4c458fb2070a1043260, type: 3}
+  - {fileID: 4622274874255130022, guid: e4b1b13a3d79f4c458fb2070a1043260, type: 3}

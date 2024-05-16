@@ -10,6 +10,7 @@ public class inventoryHolder : ScriptableObject
     public int counter = 0;
     public Dictionary<string, int> Inventory = new Dictionary<string, int>();
     public List<string> Obtainableitems;
+    public List<GameObject> Ingredients;
     public void AdministratingItems()
     {
         Debug.Log("Hello");

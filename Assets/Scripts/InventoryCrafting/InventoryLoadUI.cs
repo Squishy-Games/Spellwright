@@ -29,7 +29,7 @@ public class InventoryLoadUI : MonoBehaviour
         {
             int quantity = Inventory.RequestAmount(names[counter]);
             Debug.Log(quantity);
-            SpawnIn(quantity);
+            SpawnIn(quantity, counter);
             counter ++;
             itemCounter ++;
             if (itemCounter == ItemPlacement[plankCounter].w){
@@ -41,9 +41,10 @@ public class InventoryLoadUI : MonoBehaviour
         itemCounter = 0;
         plankCounter = 0;
     }
-    public void SpawnIn(int Amount)
+    public void SpawnIn(int Amount, int index)
     {
         Debug.Log("came here");
+        Ingredient = Inventory.Ingredients[index];
         GameObject Ingrediente = Instantiate(Ingredient, content.transform.GetChild(plankCounter).transform);
         Ingrediente.transform.position = new Vector3(ItemPlacement[plankCounter].x + distance.x * counter + 1, ItemPlacement[plankCounter].y + distance.y * counter + 1,ItemPlacement[plankCounter].z + distance.z * counter + 1);
         //Ingrediente.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = names[counter];
