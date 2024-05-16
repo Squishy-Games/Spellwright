@@ -102,9 +102,14 @@ MonoBehaviour:
   lastMousePosition: {x: 0, y: 0, z: 0}
   IsDragging: 1
   isOver: 1
-  launchspeed: 3.5
+  launchspeed: 0.6
   framesInBetween: 5
-  PositionIndexforUse: 0
+  LastPositions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
   PositionIndex: 5
 --- !u!61 &-1144442496866957034
 BoxCollider2D:

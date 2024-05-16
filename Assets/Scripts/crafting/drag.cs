@@ -11,7 +11,7 @@ public class drag : MonoBehaviour
     public bool isOver;
     public float launchspeed = 2;
     public int framesInBetween;
-    public Dictionary<int,Vector3> LastPositions;
+    public List<Vector3> LastPositions;
     public int PositionIndex; 
     // Update is called once per frame
      void FixedUpdate() 
@@ -37,12 +37,14 @@ public class drag : MonoBehaviour
             transform.GetComponent<Rigidbody2D>().gravityScale = 1;
             float frame = 0.01666666666f;
             transform.GetComponent<Rigidbody2D>().velocity = new Vector3((Input.mousePosition.x - lastMousePosition.x) * frame * launchspeed,(Input.mousePosition.y - lastMousePosition.y) * frame * launchspeed, (Input.mousePosition.z + lastMousePosition.z) * frame * launchspeed);
-            Debug.Log("speed" + new Vector3((Input.mousePosition.x + lastMousePosition.x) * frame,(Input.mousePosition.y + lastMousePosition.y) * frame, (Input.mousePosition.z + lastMousePosition.z) * frame));
+            Debug.Log("speed" + new Vector3((Input.mousePosition.x + lastMousePosition.x) * (frame * framesInBetween),(Input.mousePosition.y + lastMousePosition.y) * frame, (Input.mousePosition.z + lastMousePosition.z) * frame));
         }
     }
     public IEnumerator<WaitForEndOfFrame> wait(){
         yield return new WaitForEndOfFrame();
-        lastMousePosition = Input.mousePosition;
+        lastMousePosition = LastPositions[0];
+        LastPositions.Remove(LastPositions[0]);
+        LastPositions.Add(Input.mousePosition);
     }
     
     void OnMouseOver()
