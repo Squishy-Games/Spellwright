@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using StaticsStuff.scripts;
 using UnityEngine;
 using UnityEditor;
 [CustomEditor(typeof(MapGen))]
@@ -14,13 +13,13 @@ public class MapGenEditor : Editor
       {
          if (mapgen.autoUpdate)
          {
-            mapgen.GenerateMap();
+            mapgen.DrawMapInEditor();
          }
       }
 
       if (GUILayout.Button("generate"))
       {
-         mapgen.GenerateMap();
+         mapgen.DrawMapInEditor();
       }
 
    }
