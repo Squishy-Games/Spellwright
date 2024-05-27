@@ -1,13 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 public class InviTerrain : MonoBehaviour{
 
 	public const float maxViewDst = 450;
 	public Transform viewer;
-
+	public Material mapMaterial;
+	
 	public static Vector2 viewerPosition;
 	static MapGen mapGen;
 	int chunkSize;
@@ -51,7 +53,7 @@ public class InviTerrain : MonoBehaviour{
 					}
 					
 				} else {
-					terrainChunkDictionary.Add (viewedChunkCoord, new TerrainChunk (viewedChunkCoord, chunkSize,transform));
+					terrainChunkDictionary.Add (viewedChunkCoord, new TerrainChunk (viewedChunkCoord, chunkSize,transform, mapMaterial));
 				}
 
 			}
@@ -64,15 +66,21 @@ public class InviTerrain : MonoBehaviour{
 		Vector2 position;
 		Bounds bounds;
 
+		MapData mapData;
 
-		public TerrainChunk(Vector2 coord, int size, Transform parent) {
+		private MeshRenderer meshRenderer;
+		private MeshFilter meshFilter;
+
+		public TerrainChunk(Vector2 coord, int size, Transform parent, Material material) {
 			position = coord * size;
 			bounds = new Bounds(position,Vector2.one * size);
 			Vector3 positionV3 = new Vector3(position.x,0,position.y);
 
-			meshObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
+			meshObject = new GameObject("Terrain Chunk");
+			meshRenderer = meshObject.AddComponent<MeshRenderer>();
+			meshFilter = meshObject.AddComponent<MeshFilter>();
+			meshRenderer.material = material;
 			meshObject.transform.position = positionV3;
-			meshObject.transform.localScale = Vector3.one * size /10f;
 			meshObject.transform.parent = parent;
 			SetVisible(false);
 			mapGen.RequestMapData(OnMapDataReceived);
@@ -80,9 +88,14 @@ public class InviTerrain : MonoBehaviour{
 
 		void OnMapDataReceived(MapData mapData)
 		{
-			print("map");
+			mapGen.RequestMeshData(mapData,3,OnMeshDataReceived);
 		}
 
+		void OnMeshDataReceived(MeshData meshData)
+		{
+			meshFilter.mesh = meshData.CreateMesh();
+		}
+		
 		public void UpdateTerrainChunk() {
 			float viewerDstFromNearestEdge = Mathf.Sqrt(bounds.SqrDistance (viewerPosition));
 			bool visible = viewerDstFromNearestEdge <= maxViewDst;
@@ -97,5 +110,40 @@ public class InviTerrain : MonoBehaviour{
 		{
 			return meshObject.activeSelf;
 		}
+	}
+
+	class LODMesh
+	{
+		public Mesh mesh;
+		public bool hasRequestedMesh;
+		public bool hasMesh;
+		private int lod;
+
+		public LODMesh(int lod)
+		{
+			this.lod = lod;
+		}
+
+		void OnMeshDataReceived(MeshData meshData)
+		{
+			mesh = meshData.CreateMesh();
+			hasMesh = true;
+			
+		}
+		
+		public void RequestMesh(MapData mapData)
+		{
+			hasRequestedMesh = true;
+			mapGen.RequestMeshData(mapData,lod ,OnMeshDataReceived);
+		}
+
+	}
+	
+	public struct LODInfo
+	{
+		public int lod;
+		public float visibleDstThreshold;
+		
+		
 	}
 }

@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
         public const int mapChunkSize = 241;
         [Range(0,6)]
-        public int levelOfDetail;
+        public int editorLod;
         public float noiseScale;
 
         public int octaves;
@@ -32,6 +32,7 @@ using System.Collections.Generic;
         public TerrainType[] regions;
 
         private Queue<MapThreadInfo<MapData>> mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
+        private Queue<MapThreadInfo<MeshData>> meshDataThreadInfoQueue = new Queue<MapThreadInfo<MeshData>>();
         
         public void DrawMapInEditor()
         {
@@ -49,7 +50,7 @@ using System.Collections.Generic;
             }
             else if(drawMode==DrawMode.Mesh)
             {
-                display.DrawMesh(MeshGen.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve, levelOfDetail), TextureGen.TextureFromColourMap(mapData.colorMap, mapChunkSize, mapChunkSize));
+                display.DrawMesh(MeshGen.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve, editorLod), TextureGen.TextureFromColourMap(mapData.colorMap, mapChunkSize, mapChunkSize));
             }
         }
 
@@ -72,6 +73,22 @@ using System.Collections.Generic;
             
         }
 
+        public void RequestMeshData(MapData mapData, int lod ,Action<MeshData> callback) {
+            ThreadStart threadStart = delegate {
+                MeshDataThread(mapData, lod ,callback);
+            };
+            new Thread(threadStart).Start();
+        }
+
+        void MeshDataThread(MapData mapData, int lod, Action<MeshData> callback)
+        {
+            MeshData meshData = MeshGen.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve, lod);
+            lock (meshDataThreadInfoQueue)
+            {
+                meshDataThreadInfoQueue.Enqueue(new MapThreadInfo<MeshData>(callback,meshData));
+            }
+        }
+
         private void Update()
         {
             if (mapDataThreadInfoQueue.Count > 0)
@@ -79,6 +96,15 @@ using System.Collections.Generic;
                 for (int i = 0; i < mapDataThreadInfoQueue.Count; i++)
                 {
                     MapThreadInfo<MapData> threadInfo = mapDataThreadInfoQueue.Dequeue();
+                    threadInfo.callback(threadInfo.parameter);
+                }
+            }
+
+            if (meshDataThreadInfoQueue.Count > 0)
+            {
+                for (int i = 0; i < meshDataThreadInfoQueue.Count; i++)
+                {
+                    MapThreadInfo<MeshData> threadInfo = meshDataThreadInfoQueue.Dequeue();
                     threadInfo.callback(threadInfo.parameter);
                 }
             }
