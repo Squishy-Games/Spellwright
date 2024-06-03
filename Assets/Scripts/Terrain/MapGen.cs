@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
     public class MapGen : MonoBehaviour
     {
-        public enum DrawMode { NoiseMap,ColourMap,Mesh}
+        public enum DrawMode { NoiseMap,ColourMap,Mesh, FalloffMap}
         public DrawMode drawMode;
 
         public Noise.NormalizeMode normalizeMode;
@@ -25,16 +25,26 @@ using System.Collections.Generic;
         public int seed;
         public Vector2 offset;
 
+        public bool useFalloff;
+
         public float meshHeightMultiplier;
         public AnimationCurve meshHeightCurve;
+        public AnimationCurve falloffCurve;
 
         public bool autoUpdate;
 
         public TerrainType[] regions;
 
+        private float[,] falloffMap;
+        
         private Queue<MapThreadInfo<MapData>> mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
         private Queue<MapThreadInfo<MeshData>> meshDataThreadInfoQueue = new Queue<MapThreadInfo<MeshData>>();
-        
+
+        private void Awake()
+        {
+            falloffMap = FalloffGen.GenerateFalloffMap(mapChunkSize);
+        }
+
         public void DrawMapInEditor()
         {
             MapData mapData = GenerateMapData(Vector2.zero);
@@ -48,6 +58,10 @@ using System.Collections.Generic;
                 display.DrawTexture(TextureGen.TextureFromColourMap(mapData.colorMap,mapChunkSize,mapChunkSize));
             } else if(drawMode==DrawMode.Mesh) {
                 display.DrawMesh(MeshGen.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve, editorLod), TextureGen.TextureFromColourMap(mapData.colorMap, mapChunkSize, mapChunkSize));
+            }
+            else if (drawMode == DrawMode.FalloffMap)
+            {   
+                display.DrawTexture(TextureGen.TextureFromHeightMap(FalloffGen.GenerateFalloffMap(mapChunkSize)));
             }
         }
 
@@ -96,16 +110,26 @@ using System.Collections.Generic;
             }
         }
 
-        MapData GenerateMapData(Vector2 center) {
+        MapData GenerateMapData(Vector2 center) 
+        {
             float[,] noisemap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octaves,persistance ,lacunarity, center + offset, normalizeMode);
 
             Color[] colourMap = new Color[mapChunkSize * mapChunkSize];
             
-            for (int y = 0; y < mapChunkSize; y++) {
-                for (int x = 0; x < mapChunkSize; x++) {
+            for (int y = 0; y < mapChunkSize; y++) 
+            {
+                for (int x = 0; x < mapChunkSize; x++) 
+                {
+                    if (useFalloff)
+                    {
+                        noisemap[x, y] =  Mathf.Clamp01(noisemap[x, y] - falloffMap[x, y]);
+                    }
+                    
                     float currentHeight = noisemap[x, y];
-                    for (int i = 0; i < regions.Length; i++) {
-                        if (currentHeight >= regions[i].height) {
+                    for (int i = 0; i < regions.Length; i++) 
+                    {
+                        if (currentHeight >= regions[i].height) 
+                        {
                             colourMap[y * mapChunkSize + x] = regions[i].colour;
                         }
                         else
@@ -119,21 +143,28 @@ using System.Collections.Generic;
             return new MapData(noisemap, colourMap);
         }
 
-        private void OnValidate() {
-            if (lacunarity < 1) {
+        private void OnValidate() 
+        {
+            if (lacunarity < 1) 
+            {
                 lacunarity = 1;
             }
 
-            if (octaves < 0) {
+            if (octaves < 0) 
+            {
                 octaves = 0;
             }
+
+            falloffMap = FalloffGen.GenerateFalloffMap(mapChunkSize);
         }
 
         struct MapThreadInfo<T> {
+            
             public readonly Action<T> callback;
             public readonly T parameter;
 
-            public MapThreadInfo(Action<T> callback, T parameter) {
+            public MapThreadInfo(Action<T> callback, T parameter) 
+            {
                 this.callback = callback;
                 this.parameter = parameter;
             }
@@ -142,17 +173,20 @@ using System.Collections.Generic;
     }
 
 [System.Serializable]
-public struct TerrainType {
+public struct TerrainType 
+{
     public string name;
     public float height;
     public Color colour;
 }
 
-public struct MapData {
+public struct MapData 
+{
     public readonly float[,] heightMap;
     public readonly Color[] colorMap;
 
-    public MapData(float[,] heightMap, Color[] colorMap) {
+    public MapData(float[,] heightMap, Color[] colorMap) 
+    {
         this.heightMap = heightMap;
         this.colorMap = colorMap;
     }
