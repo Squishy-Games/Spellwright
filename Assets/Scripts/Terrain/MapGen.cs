@@ -10,6 +10,7 @@ using System.Collections.Generic;
         public enum DrawMode { NoiseMap,ColourMap,Mesh}
         public DrawMode drawMode;
 
+        public Noise.NormalizeMode normalizeMode;
 
         public const int mapChunkSize = 241;
         [Range(0,6)]
@@ -36,38 +37,30 @@ using System.Collections.Generic;
         
         public void DrawMapInEditor()
         {
-            MapData mapData = GenerateMapData();
+            MapData mapData = GenerateMapData(Vector2.zero);
             MapDisp display = FindObjectOfType<MapDisp>();
 
-            if (drawMode == DrawMode.NoiseMap)
-            {
+            if (drawMode == DrawMode.NoiseMap) {
                 display.DrawTexture(TextureGen.TextureFromHeightMap(mapData.heightMap));    
             }
 
-            else if(drawMode == DrawMode.ColourMap)
-            {
+            else if(drawMode == DrawMode.ColourMap) {
                 display.DrawTexture(TextureGen.TextureFromColourMap(mapData.colorMap,mapChunkSize,mapChunkSize));
-            }
-            else if(drawMode==DrawMode.Mesh)
-            {
+            } else if(drawMode==DrawMode.Mesh) {
                 display.DrawMesh(MeshGen.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve, editorLod), TextureGen.TextureFromColourMap(mapData.colorMap, mapChunkSize, mapChunkSize));
             }
         }
 
-        public void RequestMapData(Action<MapData> callback)
-        {
-            ThreadStart threadStart = delegate
-            {
-                MapDataThread(callback);
+        public void RequestMapData(Vector2 center, Action<MapData> callback) {
+            ThreadStart threadStart = delegate {
+                MapDataThread(center, callback);
             };
             new Thread(threadStart).Start();
         }
 
-        void MapDataThread(Action<MapData> callback)
-        {
-            MapData mapData = GenerateMapData();
-            lock (mapDataThreadInfoQueue)
-            {
+        void MapDataThread(Vector2 center, Action<MapData> callback) {
+            MapData mapData = GenerateMapData(center);
+            lock (mapDataThreadInfoQueue) {
                 mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback,mapData));
             }
             
@@ -80,52 +73,43 @@ using System.Collections.Generic;
             new Thread(threadStart).Start();
         }
 
-        void MeshDataThread(MapData mapData, int lod, Action<MeshData> callback)
-        {
+        void MeshDataThread(MapData mapData, int lod, Action<MeshData> callback) {
             MeshData meshData = MeshGen.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve, lod);
-            lock (meshDataThreadInfoQueue)
-            {
+            lock (meshDataThreadInfoQueue) {
                 meshDataThreadInfoQueue.Enqueue(new MapThreadInfo<MeshData>(callback,meshData));
             }
         }
 
-        private void Update()
-        {
-            if (mapDataThreadInfoQueue.Count > 0)
-            {
-                for (int i = 0; i < mapDataThreadInfoQueue.Count; i++)
-                {
+        private void Update() {
+            if (mapDataThreadInfoQueue.Count > 0) {
+                for (int i = 0; i < mapDataThreadInfoQueue.Count; i++) {
                     MapThreadInfo<MapData> threadInfo = mapDataThreadInfoQueue.Dequeue();
                     threadInfo.callback(threadInfo.parameter);
                 }
             }
 
-            if (meshDataThreadInfoQueue.Count > 0)
-            {
-                for (int i = 0; i < meshDataThreadInfoQueue.Count; i++)
-                {
+            if (meshDataThreadInfoQueue.Count > 0) {
+                for (int i = 0; i < meshDataThreadInfoQueue.Count; i++) {
                     MapThreadInfo<MeshData> threadInfo = meshDataThreadInfoQueue.Dequeue();
                     threadInfo.callback(threadInfo.parameter);
                 }
             }
         }
 
-        MapData GenerateMapData()
-        {
-            float[,] noisemap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octaves,persistance ,lacunarity, offset);
+        MapData GenerateMapData(Vector2 center) {
+            float[,] noisemap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octaves,persistance ,lacunarity, center + offset, normalizeMode);
 
             Color[] colourMap = new Color[mapChunkSize * mapChunkSize];
             
-            for (int y = 0; y < mapChunkSize; y++)
-            {
-                for (int x = 0; x < mapChunkSize; x++)
-                {
+            for (int y = 0; y < mapChunkSize; y++) {
+                for (int x = 0; x < mapChunkSize; x++) {
                     float currentHeight = noisemap[x, y];
-                    for (int i = 0; i < regions.Length; i++)
-                    {
-                        if (currentHeight<= regions[i].height)
-                        {
+                    for (int i = 0; i < regions.Length; i++) {
+                        if (currentHeight >= regions[i].height) {
                             colourMap[y * mapChunkSize + x] = regions[i].colour;
+                        }
+                        else
+                        {
                             break;
                         }
                     }
@@ -135,26 +119,21 @@ using System.Collections.Generic;
             return new MapData(noisemap, colourMap);
         }
 
-        private void OnValidate()
-        {
-            if (lacunarity < 1)
-            {
+        private void OnValidate() {
+            if (lacunarity < 1) {
                 lacunarity = 1;
             }
 
-            if (octaves < 0)
-            {
+            if (octaves < 0) {
                 octaves = 0;
             }
         }
 
-        struct MapThreadInfo<T>
-        {
+        struct MapThreadInfo<T> {
             public readonly Action<T> callback;
             public readonly T parameter;
 
-            public MapThreadInfo(Action<T> callback, T parameter)
-            {
+            public MapThreadInfo(Action<T> callback, T parameter) {
                 this.callback = callback;
                 this.parameter = parameter;
             }
@@ -163,20 +142,17 @@ using System.Collections.Generic;
     }
 
 [System.Serializable]
-public struct TerrainType
-{
+public struct TerrainType {
     public string name;
     public float height;
     public Color colour;
 }
 
-public struct MapData
-{
+public struct MapData {
     public readonly float[,] heightMap;
     public readonly Color[] colorMap;
 
-    public MapData(float[,] heightMap, Color[] colorMap)
-    {
+    public MapData(float[,] heightMap, Color[] colorMap) {
         this.heightMap = heightMap;
         this.colorMap = colorMap;
     }

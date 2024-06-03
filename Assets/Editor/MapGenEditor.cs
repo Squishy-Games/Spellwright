@@ -9,16 +9,13 @@ public class MapGenEditor : Editor
    {
       MapGen mapgen = (MapGen)target;
 
-      if (DrawDefaultInspector())
-      {
-         if (mapgen.autoUpdate)
-         {
+      if (DrawDefaultInspector()) {
+         if (mapgen.autoUpdate) {
             mapgen.DrawMapInEditor();
          }
       }
 
-      if (GUILayout.Button("generate"))
-      {
+      if (GUILayout.Button("generate")) {
          mapgen.DrawMapInEditor();
       }
 
