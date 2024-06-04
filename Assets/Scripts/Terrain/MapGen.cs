@@ -1,6 +1,7 @@
 using UnityEditor.AssetImporters;
 using UnityEngine;
 using UnityEngine.Serialization;
+
 using System;
 using System.Threading;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ using System.Collections.Generic;
 
         private void Awake()
         {
-            falloffMap = FalloffGen.GenerateFalloffMap(mapChunkSize);
+            falloffMap = FalloffGen.GenerateFalloffMap(mapChunkSize,falloffCurve);
         }
 
         public void DrawMapInEditor()
@@ -61,7 +62,7 @@ using System.Collections.Generic;
             }
             else if (drawMode == DrawMode.FalloffMap)
             {   
-                display.DrawTexture(TextureGen.TextureFromHeightMap(FalloffGen.GenerateFalloffMap(mapChunkSize)));
+                display.DrawTexture(TextureGen.TextureFromHeightMap(FalloffGen.GenerateFalloffMap(mapChunkSize,falloffCurve)));
             }
         }
 
@@ -155,7 +156,7 @@ using System.Collections.Generic;
                 octaves = 0;
             }
 
-            falloffMap = FalloffGen.GenerateFalloffMap(mapChunkSize);
+            falloffMap = FalloffGen.GenerateFalloffMap(mapChunkSize,falloffCurve);
         }
 
         struct MapThreadInfo<T> {
