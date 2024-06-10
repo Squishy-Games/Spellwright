@@ -13,13 +13,12 @@ public static class FalloffGen
         {
             for (int j = 0; j < size; j++)
             {
-                float x = i / (float)size * 2 - 1;
-                float y = j / (float)size * 2 - 1;
+                float x = i / (float)size;// * 2 - 1;
+                float y = j / (float)size;// * 2 - 1;
 
-                float value = Mathf.Max(Mathf.Abs(x), Mathf.Abs(y));
+                //float value = Mathf.Max(Mathf.Abs(x), Mathf.Abs(y));
                 
-                //float value = -1 * ((falloffCurve.Evaluate(x) * falloffCurve.Evaluate(y) * 2) - 1);
-                
+                float value = -1 * ((falloffCurve.Evaluate(x) * falloffCurve.Evaluate(y) * 2) - 1);
                 
                 map[i, j] = Evaluate(value);
             }
