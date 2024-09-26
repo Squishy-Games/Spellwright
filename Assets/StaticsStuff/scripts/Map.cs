@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class Map : MonoBehaviour
 {
+    [Header("General Settings for map")][Space] 
     [SerializeField] Vector2Int _mapSize = new Vector2Int(5, 5);
     [SerializeField] float _cellSize;
     [SerializeField] MapModule[] _mapModules;
@@ -17,23 +20,32 @@ public class Map : MonoBehaviour
     public int ColumnsCount => MapCellsMatrix.GetLength(1);
     private MapCell[] _mapCellsArray;
     
-    public float radius = 1;
-    public Vector3 regionSize = Vector3.one;
-    public int rejectionSamples = 30;
-    private List<Vector3> _points;
+    [Header("Settings for points and prefabs from ground foliage ")][Space] 
+    [SerializeField]private List<GameObject> groundFoliage;
+
+    public float radiusF = 1;
+    public int rejectionSamplesF = 30;
+   
     
-
-    [SerializeField]private List<GameObject> flora;
-    private RaycastHit _floraPoint;
-
+    [Header("Settings for points and prefabs from trees ")][Space] 
+    [SerializeField]private List<GameObject> trees;
+    
+    public float radiusT = 1;
+    public int rejectionSamplesT = 30;
+    
+    
+    
     private bool once;
+    private Vector3 _regionSize;
     
     private void Awake()
     {
+        _regionSize = new Vector3(_mapSize.x * _cellSize, 0, _mapSize.y * _cellSize);
+       
+        
         InizializeMap();
         FillCells();
         CreateMap();
-        _points = PoissonDiscSampling.GeneratePoints(radius, regionSize, rejectionSamples);
         once = false;
     }
 
@@ -41,7 +53,8 @@ public class Map : MonoBehaviour
     {
         if (once == false)
         {
-            SpawnFlora(_points,flora);
+            SpawnObjectsWithPointCloud(groundFoliage,radiusF,_regionSize,rejectionSamplesF);
+            SpawnObjectsWithPointCloud(trees,radiusT,_regionSize,rejectionSamplesT);
             once = true;
         }
     }
@@ -104,19 +117,21 @@ public class Map : MonoBehaviour
         return _contactTypes.First(contact => contact.ContactType == contactType);
     }
     
-    void SpawnFlora(List<Vector3> pointLibrary,List<GameObject> floraList)
+    void SpawnObjectsWithPointCloud(List<GameObject> spawnList,float radius, Vector3 sampleRegionSize, int numSamplesBeforeRejection = 30)
     {
-        for (int i = 0; i < pointLibrary.Count; i++)
+        RaycastHit rayCastFromPoints;
+        List<Vector3> points = PoissonDiscSampling.GeneratePoints(radius, sampleRegionSize, numSamplesBeforeRejection);
+        
+        for (int i = 0; i < points.Count; i++)
         {
-            Debug.Log("going tru points");
-            
-           
-              if (Physics.Raycast(new Vector3(pointLibrary[i].x, 10, pointLibrary[i].z), Vector3.down, out _floraPoint))
+              if (Physics.Raycast(new Vector3(points[i].x, 10, points[i].z), Vector3.down, out rayCastFromPoints))
               {
-                  Debug.Log("ray cast");
-                  int random = Random.Range(0, floraList.Count);
+                  int random = Random.Range(0, spawnList.Count);
+                  float randomRot = Random.Range(0f, 360f);
                   
-                  Instantiate(floraList[random],_floraPoint.point,new Quaternion());
+                  var lastPrefab = PrefabUtility.InstantiatePrefab(spawnList[random]) as GameObject;
+                  lastPrefab.transform.position = rayCastFromPoints.point;
+                  lastPrefab.transform.rotation = new Quaternion(0, randomRot, 0, 0);
               }
         }
     }
