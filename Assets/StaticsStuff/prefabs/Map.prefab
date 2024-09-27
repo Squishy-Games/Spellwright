@@ -44,21 +44,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb6f0829a8ebf1943ac2e49c56d2bdfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapSize: {x: 50, y: 50}
+  _mapSize: {x: 25, y: 25}
   _cellSize: 3
   _mapModules:
   - {fileID: -7896689432266488803, guid: 8eb9bb60ab9cabf4282d9a0349991d8c, type: 3}
   _contactTypes:
   - _contactType: Plains
     _notSuitableContactTypes:
-    - Empty
-  radius: 3
-  regionSize: {x: 150, y: 1, z: 150}
-  rejectionSamples: 50
+    - None
   groundFoliage:
   - {fileID: 6739804228592001243, guid: 6cdd667aa0034cd4dadc8d58a65fb098, type: 3}
   - {fileID: 6444807355431749394, guid: f593bc20677ebf14abd27a4853408c68, type: 3}
+  radiusF: 0.5
+  rejectionSamplesF: 80
   trees:
   - {fileID: 5935278547815300987, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
   - {fileID: 5361428799875542787, guid: c31bf8ec8e29cd74f9fb9a970fde7a53, type: 3}
   - {fileID: 1215182899609276316, guid: c6a512d95615f534cbe31aba1aaa354c, type: 3}
+  radiusT: 4
+  rejectionSamplesT: 50

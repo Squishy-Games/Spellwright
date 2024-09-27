@@ -33,8 +33,6 @@ public class Map : MonoBehaviour
     public float radiusT = 1;
     public int rejectionSamplesT = 30;
     
-    
-    
     private bool once;
     private Vector3 _regionSize;
     
@@ -133,6 +131,16 @@ public class Map : MonoBehaviour
                   lastPrefab.transform.position = rayCastFromPoints.point;
                   lastPrefab.transform.rotation = new Quaternion(0, randomRot, 0, 0);
               }
+        }
+    }
+    public void RemoveOverlap()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 1,LayerMask.NameToLayer("Greens"));
+        Debug.Log(hitColliders.Length);
+        foreach (Collider hitCollider in hitColliders)
+        {
+            Debug.Log(hitCollider.name);
+            Destroy(hitCollider.gameObject);
         }
     }
 }
