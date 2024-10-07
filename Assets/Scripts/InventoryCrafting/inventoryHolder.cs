@@ -10,16 +10,13 @@ public class inventoryHolder : ScriptableObject
     public int counter = 0;
     public Dictionary<string, int> Inventory = new Dictionary<string, int>();
     public List<string> Obtainableitems;
-    public List<string> ItemAmounts;
     public List<GameObject> Ingredients;
     public void AdministratingItems()
     {
         Debug.Log("Hello");
         while(counter < Obtainableitems.Count)
         {
-            Debug.Log("HelloAgain");
             AddToInventory(Obtainableitems[counter], 0);
-            Debug.Log(Obtainableitems[counter] + Inventory[Obtainableitems[counter]]);
             counter ++;
 
         }
@@ -42,7 +39,6 @@ public class inventoryHolder : ScriptableObject
             AddToInventory(name, amountToAdd);
         }
         Inventory[name] = Inventory[name] + amountToAdd;
-        Debug.Log(Inventory[name]);
     }
     public int RequestAmount(string name)
     {
