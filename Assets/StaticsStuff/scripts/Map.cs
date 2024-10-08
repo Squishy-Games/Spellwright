@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -35,6 +36,7 @@ public class Map : MonoBehaviour
     
     private bool once;
     private Vector3 _regionSize;
+    private List<GameObject> _objectList;
     
     private void Awake()
     {
@@ -49,12 +51,12 @@ public class Map : MonoBehaviour
 
     private void Update()
     {
-        if (once == false)
+        /*if (once == false)
         {
-            SpawnObjectsWithPointCloud(groundFoliage,radiusF,_regionSize,rejectionSamplesF);
             SpawnObjectsWithPointCloud(trees,radiusT,_regionSize,rejectionSamplesT);
+            SpawnObjectsWithPointCloud(groundFoliage,radiusF,_regionSize,rejectionSamplesF);
             once = true;
-        }
+        }*/
     }
 
     void InizializeMap()
@@ -95,7 +97,7 @@ public class Map : MonoBehaviour
             for (int j = 0; j < _mapSize.y; j++)
             {
                 var localPosition = new Vector3(i * _cellSize, 0, j * _cellSize);
-                MapCellsMatrix[i, j].States[0].InstantiatePrefab(this, localPosition);
+                MapCellsMatrix[i, j].States[0].InstantiatePrefab(this,localPosition);
             }
         }
     }
@@ -127,12 +129,14 @@ public class Map : MonoBehaviour
                   int random = Random.Range(0, spawnList.Count);
                   float randomRot = Random.Range(0f, 360f);
                   
-                  var lastPrefab = PrefabUtility.InstantiatePrefab(spawnList[random]) as GameObject;
-                  lastPrefab.transform.position = rayCastFromPoints.point;
-                  lastPrefab.transform.rotation = new Quaternion(0, randomRot, 0, 0);
+                  //var lastPrefab = PrefabUtility.InstantiatePrefab(spawnList[random]) as GameObject;
+                  //lastPrefab.transform.position = rayCastFromPoints.point;
+                  //lastPrefab.transform.rotation = new Quaternion(0, randomRot, 0, 0);
+                
               }
         }
     }
+
     public void RemoveOverlap()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 1,LayerMask.NameToLayer("Greens"));

@@ -36,6 +36,7 @@ public class MapModuleState
         GO.transform.parent = map.transform;
         GO.transform.localPosition = localPosition;
         GO.transform.Rotate(Rotation);
+        //GO.transform.parent = parent;
     }
 }
 
