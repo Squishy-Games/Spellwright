@@ -260,6 +260,7 @@ GameObject:
   - component: {fileID: 6251920492078742113}
   - component: {fileID: 4860330196579055125}
   - component: {fileID: 9199463854733148850}
+  - component: {fileID: 73683628295175502}
   m_Layer: 6
   m_Name: PT_Grass_02
   m_TagString: Untagged
@@ -326,7 +327,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 09473d06882d1414b84b1fdb7a095516, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -348,3 +349,11 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &73683628295175502
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6739804228592001243}
+  m_Mesh: {fileID: 3836962167230424001, guid: 8c71f03fcb0c13644a30696cafc5cda8, type: 3}

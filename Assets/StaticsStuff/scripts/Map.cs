@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Reflection;
+using sc.terrain.vegetationspawner;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -21,19 +22,6 @@ public class Map : MonoBehaviour
     public int ColumnsCount => MapCellsMatrix.GetLength(1);
     private MapCell[] _mapCellsArray;
     
-    [Header("Settings for points and prefabs from ground foliage ")][Space] 
-    [SerializeField]private List<GameObject> groundFoliage;
-
-    public float radiusF = 1;
-    public int rejectionSamplesF = 30;
-   
-    
-    [Header("Settings for points and prefabs from trees ")][Space] 
-    [SerializeField]private List<GameObject> trees;
-    
-    public float radiusT = 1;
-    public int rejectionSamplesT = 30;
-    
     private bool once;
     private Vector3 _regionSize;
     private List<GameObject> _objectList;
@@ -41,7 +29,6 @@ public class Map : MonoBehaviour
     private void Awake()
     {
         _regionSize = new Vector3(_mapSize.x * _cellSize, 0, _mapSize.y * _cellSize);
-       
         
         InizializeMap();
         FillCells();
@@ -51,12 +38,11 @@ public class Map : MonoBehaviour
 
     private void Update()
     {
-        /*if (once == false)
+        if (once == false)
         {
-            SpawnObjectsWithPointCloud(trees,radiusT,_regionSize,rejectionSamplesT);
-            SpawnObjectsWithPointCloud(groundFoliage,radiusF,_regionSize,rejectionSamplesF);
+           addVeg();
             once = true;
-        }*/
+        }
     }
 
     void InizializeMap()
@@ -116,35 +102,11 @@ public class Map : MonoBehaviour
     {
         return _contactTypes.First(contact => contact.ContactType == contactType);
     }
-    
-    void SpawnObjectsWithPointCloud(List<GameObject> spawnList,float radius, Vector3 sampleRegionSize, int numSamplesBeforeRejection = 30)
-    {
-        RaycastHit rayCastFromPoints;
-        List<Vector3> points = PoissonDiscSampling.GeneratePoints(radius, sampleRegionSize, numSamplesBeforeRejection);
-        
-        for (int i = 0; i < points.Count; i++)
-        {
-              if (Physics.Raycast(new Vector3(points[i].x, 10, points[i].z), Vector3.down, out rayCastFromPoints))
-              {
-                  int random = Random.Range(0, spawnList.Count);
-                  float randomRot = Random.Range(0f, 360f);
-                  
-                  //var lastPrefab = PrefabUtility.InstantiatePrefab(spawnList[random]) as GameObject;
-                  //lastPrefab.transform.position = rayCastFromPoints.point;
-                  //lastPrefab.transform.rotation = new Quaternion(0, randomRot, 0, 0);
-                
-              }
-        }
-    }
 
-    public void RemoveOverlap()
+    public void addVeg()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 1,LayerMask.NameToLayer("Greens"));
-        Debug.Log(hitColliders.Length);
-        foreach (Collider hitCollider in hitColliders)
-        {
-            Debug.Log(hitCollider.name);
-            Destroy(hitCollider.gameObject);
-        }
+        VegetationSpawner.Current.seed = Random.Range(0,9999);
+        VegetationSpawner.Current.terrains = Terrain.activeTerrains.ToList();
+        VegetationSpawner.Current.Respawn();
     }
 }
