@@ -4,24 +4,27 @@ using UnityEngine.UI;
 public class PlayerClass : CharacterBaseClass
 {
     private PlayerHealthBar _healthBar;
-    
-    // Start is called before the first frame update
-    protected void Start()
+
+    void Start()
     {
         health = maxHealth;
         _healthBar = FindObjectOfType<PlayerHealthBar>();
-        _healthBar.setHealth(maxHealth);
+        _healthBar.SetHealth(maxHealth);
     }
 
     public override void TakeDamage(int damage)
     {
         health -= damage;
+
+        health = Mathf.Clamp(health, 0f, maxHealth);
+
         _healthBar.UpdateHealth(health);
     }
 
-    public override void Heal(float healHealth)
+    public override void Heal(float healAmount)
     {
-        health += healHealth;
-        _healthBar.UpdateHealth(healHealth);
+        health += healAmount;
+        health = Mathf.Clamp(health, 0f, maxHealth);
+        _healthBar.UpdateHealth(health);
     }
 }

@@ -3,7 +3,6 @@ using UnityEngine.Events;
 
 public abstract class CharacterBaseClass : MonoBehaviour
 {
-
     public float health;
     public float maxHealth;
 
@@ -17,5 +16,4 @@ public abstract class CharacterBaseClass : MonoBehaviour
     {
         health += healHealth;
     }
-
 }
